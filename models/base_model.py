@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Defines the BaseModel class"""
 
+import models
 from uuid import uuid4
 from datetime import datetime
 
@@ -25,11 +26,12 @@ class BaseModel:
                 else:
                     self.__dict__[k] = v
         else:
-            pass
+            models.storage.new(self)
 
     def save(self):
         """Updates update_at with the current date and time"""
         self.update_at = datetime.today()
+        models.storage.new(self)
 
     def to_dict(self):
         """
