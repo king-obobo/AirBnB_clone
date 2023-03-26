@@ -7,20 +7,23 @@ from datetime import datetime
 class BaseModel:
     """Defines all common attributes/methods for other classes"""
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """Initializes a new BaseModel
 
         Args:
-            id (string): Assigned when an instance is created
-            created_at: Date-time assigned witch current datw when instance is
-            created
-            update_at: Date-time assigned with the current datetime when
-            instance is created and updated everytime objects is changes
+            *args (any): Unused.
+            **kwargs (dict): Key/Value pairs of attributes
         """
         DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
         self.id = str(uuid4())
         self.created_at = datetime.today()
         self.updated_at = datetime.today()
+        if len(kwargs) != 0:
+            for k, v in kwargs.items():
+                if k == "created_at" or k == "updated_at":
+                    self.__dict__[k] = datetime.strptime(v, DATE_FORMAT)
+                else:
+                    self.__dict__[k] = v
 
     def save(self):
         """updates "updated_at" with the current datetime"""
